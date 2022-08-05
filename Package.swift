@@ -1,38 +1,51 @@
-// swift-tools-version:5.6
+// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
-    name: "swiftBackend",
-    platforms: [
-       .macOS(.v12)
-    ],
+    name: "VaporServer",
     dependencies: [
         // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0"),
-    ],
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
+        .package(url: "https://github.com/vapor/leaf.git", from: "3.0.0-rc"),
+        
+        .package(url: "https://github.com/vapor/fluent-postgresql.git", from: "1.0.0-rc"),
+        
+        .package(url: "https://github.com/skelpo/APIErrorMiddleware.git", from: "0.1.0"),
+        .package(url: "https://github.com/IBM-Swift/Swift-SMTP.git", from: "4.0.1"),
+        
+        // JWT Middleware to authenticate
+        .package(url: "https://github.com/vapor/jwt.git", from: "3.0.0-rc"),
+        .package(url: "https://github.com/skelpo/JWTMiddleware.git", from: "0.6.1"),
+        
+        .package(url: "https://github.com/vapor/multipart.git", from: "3.0.0"),
+        
+        .package(url: "https://github.com/vapor/auth.git", from: "2.0.0-rc"),
+        .package(url: "https://github.com/vapor/crypto.git", from: "3.0.0"),
+        .package(url: "https://github.com/vapor/console.git", from: "3.0.0"),
+        
+        .package(url: "https://github.com/vapor/redis.git", from: "3.0.0-rc"),
+        
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "1.7.1"),
+        .package(url: "https://github.com/PerfectSideRepos/Perfect-ICONV.git",from:"3.0.1")
+        ],
     targets: [
-        .target(
-            name: "App",
-            dependencies: [
-                .product(name: "Fluent", package: "fluent"),
-                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
-                .product(name: "Leaf", package: "leaf"),
-                .product(name: "Vapor", package: "vapor")
-            ],
-            swiftSettings: [
-                // Enable better optimizations when building in Release configuration. Despite the use of
-                // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
-                // builds. See <https://github.com/swift-server/guides/blob/main/docs/building.md#building-for-production> for details.
-                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
-            ]
-        ),
-        .executableTarget(name: "Run", dependencies: [.target(name: "App")]),
-        .testTarget(name: "AppTests", dependencies: [
-            .target(name: "App"),
-            .product(name: "XCTVapor", package: "vapor"),
-        ])
+        .target(name: "App", dependencies: ["SwiftSMTP",
+                                            "Leaf",
+                                            "FluentPostgreSQL",
+                                            "PerfectICONV",
+                                            "Vapor",
+                                            "JWTMiddleware",
+                                            "JWT",
+                                            "Multipart",
+                                            "Authentication",
+                                            "Crypto",
+                                            "Logging",
+                                            "Redis",
+                                            "SwiftSoup",
+                                            "APIErrorMiddleware"
+            ]),
+        .target(name: "Run", dependencies: ["App"]),
+        .testTarget(name: "AppTests", dependencies: ["App"])
     ]
 )
+

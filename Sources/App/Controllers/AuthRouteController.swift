@@ -10,6 +10,9 @@ import Vapor
 import Fluent
 import Crypto
 import Authentication
+import AuthenticationServices
+import LocalAuthentication
+import LocalAuthenticationEmbeddedUI
 
 struct AuthenRouteController: RouteCollection {
     

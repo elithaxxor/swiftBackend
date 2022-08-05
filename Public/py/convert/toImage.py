@@ -6,7 +6,7 @@ import getopt
 from optparse import OptionParser  
 
 import argparse
-parser = argparse.ArgumentParser(description="请指定图片输出名称")
+parser = argparse.ArgumentParser(description=")
 parser.add_argument('key')
 parser.add_argument('d')
 parser.add_argument('imgPath')
